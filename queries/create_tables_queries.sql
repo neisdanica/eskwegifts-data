@@ -12,7 +12,7 @@ FROM (
     *,
     ROW_NUMBER() OVER (PARTITION BY accountId ORDER BY purchaseDate) AS order_sequence
   FROM
-    `sprint3-415908.sprint3_4_dataset.order_list`
+    `dab-cohort13-414306.eskwegifts_data.orders`
 ) AS CustomerOrders
 ORDER BY purchaseDate;
 
@@ -43,9 +43,9 @@ SELECT  o.*,
         END AS churnedCustomer
 
 FROM `dab-cohort13-414306.ESKWEGIFTS_DATA.order_list_updated` o
-LEFT JOIN `sprint3-415908.sprint3_4_dataset.item_info` i
+LEFT JOIN `dab-cohort13-414306.eskwegifts_data.item_info` i
     ON o.skuId = i.skuId
-LEFT JOIN `sprint3-415908.sprint3_4_dataset.user_list` u
+LEFT JOIN `dab-cohort13-414306.eskwegifts_data.user_list` u
     ON o.accountId = u.id;
 
 /* 
@@ -54,7 +54,7 @@ LEFT JOIN `sprint3-415908.sprint3_4_dataset.user_list` u
    Categorize churned customers based on their order history.
 */
 WITH ChurnedCustomers AS (
-  SELECT purchaseDate_1, accountId
+  SELECT purchaseDate_1, accountId,location, orderAmount 
   FROM `dab-cohort13-414306.ESKWEGIFTS_DATA.all_data`
   WHERE purchaseYear = 2022
   AND accountId NOT IN (
